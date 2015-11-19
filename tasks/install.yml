@@ -6,8 +6,7 @@
   yum: name=java-1.8.0-openjdk-devel.x86_64 state=present
 
 - name: Add EPEL Repo
-  command: /bin/rpm -U https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-  creates:/etc/yum.repos.d/epel.repo
+  yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm state=present
   when: ansible_distribution == "CentOS"
 
 - name: Install SetupTools
@@ -70,7 +69,7 @@
   file: path=/etc/jiiify owner=jiiify mode=0700 state=directory
 
 - name: Start Jiiify's Jenkins build
-  script: trigger-jenkins.sh {{ jiiify_jenkins_auth }} {{ jiiify_build_token }} {{ ansible_nodename }} {{ ansible_ami_id }}
+  script: trigger-jenkins.sh {{ jiiify_jenkins_auth }} {{ jiiify_build_token }} {{ ansible_nodename }} {{ ansible_ec2_ami_id }}
   no_log: True
 
 - name: Download Jiiify
