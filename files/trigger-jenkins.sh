@@ -5,7 +5,6 @@
 # Also, when we get a production Jenkins, use a Jenkins user other than ksclarke
 #
 
-IMAGES_STAGING_VM="lit245v"
 JOB_URL="https://jenkins.library.ucla.edu/job/jiiify-image-server"
 JOB_STATUS_URL="${JOB_URL}/lastBuild/api/json"
 
@@ -13,8 +12,7 @@ GREP_RETURN_CODE=0
 LOOP_LIMIT=24
 LOOP_COUNT=0
 
-# Going to keep both local and EC2 configuration options for now
-if [[ "$3" == "$IMAGES_STAGING_VM" ]] || [[ "$3" == ami-* ]]; then
+if [[ "$3" == "library.ucla.edu" ]] || [[ "$3" == "us-west-1.compute.internal" ]]; then
   HOST_NAME="stage-images.library.ucla.edu"
   SOLR_SERVER="http%3A%2F%2Ftemp-solrsearch.library.ucla.edu%2Fsolr%2Fjiiify"
 else
