@@ -7,7 +7,6 @@
 
 - name: Add EPEL Repo
   yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm state=present
-  when: ansible_distribution == "CentOS" or ansible_distribution == 'RedHat'
 
 - name: Install SetupTools
   shell: wget https://bootstrap.pypa.io/ez_setup.py -O - | python
