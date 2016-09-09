@@ -1,0 +1,15 @@
+---
+- name: Add user to run Java
+  user: name=jiiify state=present
+
+- name: Create Jiiify directory
+  file: path=/opt/jiiify owner=jiiify mode=0700 state=directory
+
+- name: Create Jiiify logs directory
+  file: path=/var/log/jiiify owner=jiiify mode=0700 state=directory
+
+- name: Create Jiiify data dir
+  file: path=/mnt/jiiify_data owner=jiiify mode=0700 state=directory
+
+- name: Create Jiiify conf directory
+  file: path=/etc/jiiify owner=jiiify mode=0700 state=directory
