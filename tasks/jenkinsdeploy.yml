@@ -26,20 +26,11 @@
   script: configure-jiiify.sh {{ google_oauth_id }} {{ facebook_oauth_id }}
   no_log: True
 
-- name: Set supervisord.conf file attributes
-  file: path=/etc/supervisord.conf mode=0600 state=file
-
 - name: Set Jiiify JSON config file attributes
   file: path=/etc/jiiify/config.json owner=jiiify mode=0600 state=file
 
-- name: Create Supervisor log file directory
-  file: path=/var/log/supervisor mode=0700 state=directory
-
-- name: Create Supervisor log file
-  copy: content="" dest=/var/log/supervisor/supervisord.log mode=0600
-
-- name: Make sure Supervisor is running
-  shell: if [ ! -e /var/run/supervisor.sock ] ; then supervisord -c /etc/supervisord.conf ; fi
-
-- name: Restart Supervisor with new config file
-  supervisorctl: name=jiiify state=restarted config=/etc/supervisord.conf
+- name: Set supervisord.conf file attributes
+  file: path=/etc/supervisord.conf mode=0600 state=file
+  notify:
+    - create supervisord socket
+    - restart supervisord
