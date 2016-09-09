@@ -1,0 +1,45 @@
+---
+- name: Start Jiiify's Jenkins build
+  script: trigger-jenkins.sh {{ jiiify_jenkins_auth }} {{ jiiify_build_token }} {{ jiiify_env }}.library.ucla.edu
+  no_log: True
+
+- name: Download Jiiify
+  shell: wget --user=ksclarke --password={{ jiiify_jenkins_auth }} -O /opt/jiiify/jiiify-{{ jiiify_version }}-exec.jar --auth-no-challenge https://jenkins.library.ucla.edu/job/jiiify-image-server/ws/target/jiiify-{{ jiiify_version }}-exec.jar
+  no_log: True
+
+- name: Remove Jiiify artifact from Jenkins server
+  shell: curl -u ksclarke:{{ jiiify_jenkins_auth }} "https://jenkins.library.ucla.edu/job/jiiify-cleanup/build?token={{ jiiify_build_token }}"
+  no_log: True
+
+- name: Set file attributes for Jar file
+  file: path=/opt/jiiify/jiiify-{{ jiiify_version }}-exec.jar owner=jiiify mode=0600 state=file
+
+  # Using unzip instead of unarchive because we're only unzippping one particular file
+- name: Unpack Jiiify supervisord.conf file
+  shell: unzip -o -d /etc /opt/jiiify/jiiify-{{ jiiify_version }}-exec.jar supervisord.conf
+
+  # Using unzip instead of unarchive because we're only unzippping one particular file
+- name: Unpack Jiiify JSON config file
+  shell: unzip -o -d /etc/jiiify /opt/jiiify/jiiify-{{ jiiify_version }}-exec.jar sample-config.json
+
+- name: Reconfigure Jiiify JSON config file
+  script: configure-jiiify.sh {{ google_oauth_id }} {{ facebook_oauth_id }}
+  no_log: True
+
+- name: Set supervisord.conf file attributes
+  file: path=/etc/supervisord.conf mode=0600 state=file
+
+- name: Set Jiiify JSON config file attributes
+  file: path=/etc/jiiify/config.json owner=jiiify mode=0600 state=file
+
+- name: Create Supervisor log file directory
+  file: path=/var/log/supervisor mode=0700 state=directory
+
+- name: Create Supervisor log file
+  copy: content="" dest=/var/log/supervisor/supervisord.log mode=0600
+
+- name: Make sure Supervisor is running
+  shell: if [ ! -e /var/run/supervisor.sock ] ; then supervisord -c /etc/supervisord.conf ; fi
+
+- name: Restart Supervisor with new config file
+  supervisorctl: name=jiiify state=restarted config=/etc/supervisord.conf
