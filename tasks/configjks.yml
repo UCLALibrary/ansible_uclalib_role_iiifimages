@@ -1,0 +1,64 @@
+---
+- name: Create JKS config directory
+  file:
+    path={{ sslpath }}/{{ jiiify_env }}
+    state=directory
+    group=root
+    owner=root
+    mode=0700
+    recurse=yes
+
+- name: Copy SSL key
+  copy:
+    dest={{ sslpath }}/{{ jiiify_env }}-key
+    content={{ jks_secret_files[jiiify_env]['privkey'] }}
+    owner=root
+    group=root
+    mode=0600
+  no_log: True
+
+- name: Copy SSL cert
+  copy:
+    dest={{ sslpath }}/{{ jiiify_env }}-crt
+    content={{ jks_secret_files[jiiify_env]['cert'] }}
+    owner=root
+    group=root
+    mode=0644
+  no_log: True
+
+- name: Copy InCommon Chain
+  copy:
+    dest={{ sslpath }}/{{ jiiify_env }}-incommon-chain
+    content={{ jks_secret_files['incommon']['cert'] }}
+    owner=root
+    group=root
+    mode=0644
+  no_log: True
+
+- name: Link current cert
+  file: src={{ sslpath }}/{{ jiiify_env }}-crt dest={{ sslpath }}/current-crt state=link
+
+- name: Link current key
+  file: src={{ sslpath }}/{{ jiiify_env }}-key dest={{ sslpath }}/current-key state=link
+
+- name: Link current chain
+  file: src={{ sslpath }}/{{ jiiify_env }}-incommon-chain dest={{ sslpath }}/current-chain state=link
+
+  # Using unzip instead of unarchive because we're only unzippping one particular file
+- name: Upload JKS generation script
+  copy: src=jksgen-incommon.sh dest=/opt/jiiify/jksgen-incommon.sh owner=root group=root mode=0700
+
+- name: Build JKS
+  shell: /opt/jiiify/jksgen-incommon.sh {{ jiiify_env }}.library.ucla.edu $(cat /etc/supervisord.conf | grep -o 'jiiify.key.pass=[^"]*' | tr "=" "\n" | grep -v '^jiiify')
+
+- name: Install JKS
+  shell: mv le_jiiify.jks /etc/jiiify/jiiify.jks
+
+- name: Set JKS permissions
+  file: path=/etc/jiiify/jiiify.jks state=touch mode=0600 owner=jiiify group=jiiify
+
+- name: Set supervisord.conf file attributes
+  file: path=/etc/supervisord.conf mode=0600 state=file
+
+- name: Restart Supervisor with new config file
+  supervisorctl: name=jiiify state=restarted config=/etc/supervisord.conf
