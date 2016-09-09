@@ -1,2 +1,5 @@
 ---
-- include: install.yml
+- include: createsystemusers.yml
+- include: installtools.yml
+- include: jenkinsdeploy.yml
+- include: configjks.yml
