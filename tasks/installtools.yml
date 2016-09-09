@@ -20,6 +20,12 @@
 - name: Configure supervisor to start at boot
   service: name=supervisor enabled=yes
 
+- name: Create Supervisor log file directory
+  file: path=/var/log/supervisor mode=0700 state=directory
+
+- name: Create Supervisor log file
+  copy: content="" dest=/var/log/supervisor/supervisord.log mode=0600
+
 - name: Install Htop
   yum: name=htop state=present
 
