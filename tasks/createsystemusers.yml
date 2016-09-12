@@ -13,3 +13,6 @@
 
 - name: Create Jiiify conf directory
   file: path=/etc/jiiify owner=jiiify mode=0700 state=directory
+
+- name: Create mountpoint for sinai
+  file: path=/sinai owner=root group=root mode=0755 state=directory
