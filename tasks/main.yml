@@ -1,5 +1,6 @@
 ---
 - include: createsystemusers.yml
+- include: awsconfig.yml
 - include: installtools.yml
 - include: jenkinsdeploy.yml
   tags: [ codedeploy, merge ]

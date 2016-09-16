@@ -1,3 +1,4 @@
 ---
 dependencies:
   - { role: uclalib_role_epel }
+  - { role: uclalib_role_awscli }
