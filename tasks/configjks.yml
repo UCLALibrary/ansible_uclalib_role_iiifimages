@@ -11,7 +11,7 @@
 - name: Copy SSL key
   copy:
     dest={{ sslpath }}/{{ jiiify_env }}-key
-    content={{ jks_secret_files[jiiify_env]['privkey'] }}
+    content={{ secret_files[jiiify_env]['privkey'] }}
     owner=root
     group=root
     mode=0600
@@ -20,7 +20,7 @@
 - name: Copy SSL cert
   copy:
     dest={{ sslpath }}/{{ jiiify_env }}-crt
-    content={{ jks_secret_files[jiiify_env]['cert'] }}
+    content={{ secret_files[jiiify_env]['cert'] }}
     owner=root
     group=root
     mode=0644
@@ -29,7 +29,7 @@
 - name: Copy InCommon Chain
   copy:
     dest={{ sslpath }}/{{ jiiify_env }}-incommon-chain
-    content={{ jks_secret_files['incommon']['cert'] }}
+    content={{ secret_files['incommon']['cert'] }}
     owner=root
     group=root
     mode=0644
