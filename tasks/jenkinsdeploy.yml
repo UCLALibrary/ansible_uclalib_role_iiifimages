@@ -1,6 +1,6 @@
 ---
 - name: Start Jiiify's Jenkins build
-  script: trigger-jenkins.sh {{ jiiify_jenkins_auth }} {{ jiiify_build_token }} {{ jiiify_env }}.library.ucla.edu
+  script: trigger-jenkins.sh {{ jiiify_jenkins_auth }} {{ jiiify_build_token }} {{ jiiify_env }}.library.ucla.edu {{ secret_files[jiiify_env]['github_branch'] }}
   no_log: True
 
 - name: Download Jiiify
