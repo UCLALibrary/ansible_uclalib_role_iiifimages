@@ -23,10 +23,11 @@ SOLR_SERVER="http%3A%2F%2Ft-w-solrlb01.library.ucla.edu%2Fsolr%2Fjiiify"
 RAM="1024m"
 JKS_PATH="/etc/jiiify/jiiify.jks"
 GITHUB_BRANCH=$4
+S3BUCKET=$5
 #fi
 
 # Start the build
-curl -u "ksclarke:${1}" -L -s "${JOB_URL}/buildWithParameters?delay=0sec&HOST=${HOST_NAME}&JKS=${JKS_PATH}&SOLR_HOST=${SOLR_SERVER}&MEMORY=${RAM}&token=${2}&GITHUB_BRANCH=${GITHUB_BRANCH}"
+curl -u "ksclarke:${1}" -L -s "${JOB_URL}/buildWithParameters?delay=0sec&HOST=${HOST_NAME}&JKS=${JKS_PATH}&SOLR_HOST=${SOLR_SERVER}&MEMORY=${RAM}&token=${2}&GITHUB_BRANCH=${GITHUB_BRANCH}&S3BUCKET=${S3BUCKET}"
 
 # Poll every ten seconds until the build is finished
 while [ $GREP_RETURN_CODE -eq 0 ]
