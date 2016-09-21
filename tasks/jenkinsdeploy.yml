@@ -21,6 +21,9 @@
 - name: Upload JSON config file
   template: src=config.json.j2 dest=/etc/jiiify/config.json owner=jiiify group=jiiify mode=0600
   no_log: True
+
+- name: Temporary hotfix for disabling solr
+  script: configure-supervisor.sh
   
 - name: Set supervisord.conf file attributes
   file: path=/etc/supervisord.conf mode=0600 state=file
