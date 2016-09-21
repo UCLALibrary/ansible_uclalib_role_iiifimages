@@ -42,7 +42,7 @@
   yum: name=lynx state=present
 
 - name: Install GCC to compile Authbind
-  yum: name=gcc.x86_64 state=present
+  yum: name=gcc state=present
 
 - name: Download Authbind
   get_url:
