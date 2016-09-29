@@ -9,6 +9,7 @@
 CONFIG_FILE=/etc/jiiify/config.json
 
 # Copy the template file
+cp -rp /etc/jiiify/sample-config.json /tmp/sampe-config.json
 mv /etc/jiiify/sample-config.json $CONFIG_FILE
 
 # Overwrite default values in the template file

@@ -1,0 +1,9 @@
+---
+- name: Create AWS config directory
+  file: path={{ awscredpath }} owner={{ awsowner }} group={{ awsownergroup }} mode=0700 state=directory
+
+- name: Configure single user credentials
+  template: src=credentials.j2 dest={{ awscredpath }}/credentials owner={{ awsowner }} group={{ awsownergroup }} mode=0600
+
+- name: Configure single user credentials
+  template: src=config.j2 dest={{ awscredpath }}/config owner={{ awsowner }} group={{ awsownergroup }} mode=0600

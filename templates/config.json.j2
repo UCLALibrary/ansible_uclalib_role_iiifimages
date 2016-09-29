@@ -1,0 +1,9 @@
+{
+  "jiiify.oauth.google.clientId": "{{ google_oauth_id }}",
+  "jiiify.oauth.facebook.clientId": "{{ facebook_oauth_id }}",
+  "jiiify.oauth.users": ["ksclarke@gmail.com", "kristian.j.allen@gmail.com", "stassewright@gmail.com", "kirschbombe@gmail.com", "parinita.ghorpade@gmail.com", "markamatney@gmail.com"],
+  "aws.access.key": "{{ secret_files[jiiify_env]['aws_access_key'] }}",
+  "aws.secret.key": "{{ secret_files[jiiify_env]['aws_secret_key'] }}",
+  "s3.endpoint": "{{ secret_files[jiiify_env]['s3_endpoint'] }}",
+  "jiiify.data.dir": "{{ secret_files[jiiify_env]['s3_bucketname'] }}"
+}

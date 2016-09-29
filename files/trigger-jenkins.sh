@@ -12,20 +12,22 @@ GREP_RETURN_CODE=0
 LOOP_LIMIT=24
 LOOP_COUNT=0
 
-if [[ "$3" == "library.ucla.edu" ]] || [[ "$3" == "us-west-1.compute.internal" ]] || [[ "$3" == "eu-central-1.compute.internal"  ]]; then
-  HOST_NAME="stage-images.library.ucla.edu"
-  SOLR_SERVER="http%3A%2F%2Ftemp-solrsearch.library.ucla.edu%2Fsolr%2Fjiiify"
-  RAM="2048m"
-  JKS_PATH="/etc/jiiify/jiiify.jks"
-else
-  HOST_NAME="localhost"
-  SOLR_SERVER="http%3A%2F%2Flocalhost%3A8983%2Fsolr%2Fjiiify"
-  RAM="1024m"
-  JKS_PATH="jiiify.jks"
-fi
+#if [[ "$3" == "library.ucla.edu" ]] || [[ "$3" == "us-west-1.compute.internal" ]] || [[ "$3" == "eu-central-1.compute.internal"  ]]; then
+#  HOST_NAME="stage-images.library.ucla.edu"
+#  SOLR_SERVER="http%3A%2F%2Ftemp-solrsearch.library.ucla.edu%2Fsolr%2Fjiiify"
+#  RAM="2048m"
+#  JKS_PATH="/etc/jiiify/jiiify.jks"
+#else
+HOST_NAME=$3
+SOLR_SERVER="http%3A%2F%2Ft-w-solrlb01.library.ucla.edu%2Fsolr%2Fjiiify"
+RAM="1024m"
+JKS_PATH="/etc/jiiify/jiiify.jks"
+GITHUB_BRANCH=$4
+S3BUCKET=$5
+#fi
 
 # Start the build
-curl -u "ksclarke:${1}" -L -s "${JOB_URL}/buildWithParameters?delay=0sec&HOST=${HOST_NAME}&JKS=${JKS_PATH}&SOLR_HOST=${SOLR_SERVER}&MEMORY=${RAM}&token=${2}"
+curl -u "ksclarke:${1}" -L -s "${JOB_URL}/buildWithParameters?delay=0sec&HOST=${HOST_NAME}&JKS=${JKS_PATH}&SOLR_HOST=${SOLR_SERVER}&MEMORY=${RAM}&token=${2}&GITHUB_BRANCH=${GITHUB_BRANCH}&S3BUCKET=${S3BUCKET}"
 
 # Poll every ten seconds until the build is finished
 while [ $GREP_RETURN_CODE -eq 0 ]
