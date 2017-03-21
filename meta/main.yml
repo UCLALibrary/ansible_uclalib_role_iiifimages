@@ -1,4 +1,4 @@
 ---
-dependencies:
-  - { role: uclalib_role_epel }
-  - { role: uclalib_role_awscli }
+#dependencies:
+#  - { role: uclalib_role_epel }
+#  - { role: uclalib_role_awscli }
