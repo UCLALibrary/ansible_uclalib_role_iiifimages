@@ -1,0 +1,31 @@
+# Supervisor configuration for Jiiify
+
+[unix_http_server]
+file=/var/run/supervisor.sock
+chmod=0700
+
+[supervisord]
+# Docker uses nodaemon=true
+#nodaemon=true
+logfile=/var/log/supervisor/supervisord.log
+pidfile=/var/run/supervisord.pid
+childlogdir=/var/log/supervisor
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory=supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix:///var/run/supervisor.sock
+
+[program:jiiify]
+user=jiiify
+directory=/tmp
+autostart=true
+autorestart=true
+command=authbind java "-XX:+UseConcMarkSweepGC" "-XX:+UseParNewGC" "-Xms1024m" "-Xmx1024m"
+    "-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory" "-Djiiify.host={{ secret_files[jiiify_env]['jiiify_host'] }}"
+    "-Djiiify.key.pass={{ secret_files[jiiify_env]['jiiify_key_pass'] }}" "-Djiiify.port=443" "-Djiiify.redirect.port=80" "-Djdk.tls.ephemeralDHKeySize=2048"
+    "-Djiiify.watch.folder=" "-Djiiify.solr.server={{ secret_files[jiiify_env]['jiiify_solr_server'] }}" "-Djiiify.data.dir={{ secret_files[jiiify_env]['jiiify_data_dir'] }}"
+    "-Dvertx.metrics.options.enabled=true" "-Dvertx.metrics.options.registryName=jiiify.metrics" "-Djiiify.jks={{ secret_files[jiiify_env]['jiiify_jks'] }}"
+    "-Dcom.sun.management.jmxremote" "-Dvertx.metrics.options.jmxEnabled=true" "-Djiiify.ignore.failures=true"
+    "-server" -jar /opt/jiiify/jiiify-0.0.2-SNAPSHOT.jar -conf "/etc/jiiify/config.json"
