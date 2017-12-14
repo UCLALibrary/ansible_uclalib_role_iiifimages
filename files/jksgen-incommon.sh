@@ -14,26 +14,25 @@ fi
 
 # Delete the JKS from our previous run (if it's still around)
 sudo rm -f le_jiiify.jks
-NEWKEYPASS=$(cat /tmp/supervisord.conf | grep -i key.pass | cut -d '"' -f2 | cut -d '=' -f2 cat /tmp/supervisord.conf | grep -i key.pass | cut -d '"' -f2 | cut -d '=' -f2)
-
-sed -i "s/CHANGEKEYPASS/$NEWKEYPASS/g" /etc/supervisord.conf
 
 SSLROOT="/var/local/ssl/$1"
 
-echo $NEWKEYPASS
+KEYPASS=$2
+
+echo $2
 
 sudo openssl pkcs12 -export \
   -in "$SSLROOT/current-crt" \
   -inkey "$SSLROOT/current-key" \
   -certfile "$SSLROOT/current-chain" \
   -out "/tmp/jiiify_cert_and_key.p12" \
-  -password "pass:$NEWKEYPASS"
+  -password "pass:$KEYPASS"
 
 sudo keytool -importkeystore \
   -srckeystore "/tmp/jiiify_cert_and_key.p12" \
   -srcstoretype "pkcs12" \
-  -srcstorepass "$NEWKEYPASS" \
+  -srcstorepass "$KEYPASS" \
   -destkeystore "le_jiiify.jks" \
-  -destkeypass "$NEWKEYPASS" \
-  -deststorepass "$NEWKEYPASS" \
+  -destkeypass "$KEYPASS" \
+  -deststorepass "$KEYPASS" \
   -trustcacerts
