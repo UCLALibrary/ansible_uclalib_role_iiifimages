@@ -14,8 +14,8 @@
   file: path=/opt/jiiify/{{ secret_files[jiiify_env]['jiiify_vers'] }} owner=jiiify mode=0600 state=file
 
 # Using unzip instead of unarchive because we're only unzippping one particular file
-#- name: Unpack Jiiify supervisord.conf file
-#  shell: unzip -o -d /etc /opt/jiiify/jiiify-{{ jiiify_version }}-exec.jar supervisord.conf
+- name: Unpack Jiiify raw supervisord.conf file
+  shell: unzip -o -d /tmp /opt/jiiify/{{ secret_files[jiiify_env]['jiiify_vers'] }} supervisord.conf
 
 # Upload supervisord.conf
 - name: Upload supervisord.conf
