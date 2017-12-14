@@ -17,6 +17,8 @@ sudo rm -f le_jiiify.jks
 
 SSLROOT="/var/local/ssl/$1"
 
+KEYPASS=$2
+
 echo $2
 
 sudo openssl pkcs12 -export \
@@ -24,13 +26,13 @@ sudo openssl pkcs12 -export \
   -inkey "$SSLROOT/current-key" \
   -certfile "$SSLROOT/current-chain" \
   -out "/tmp/jiiify_cert_and_key.p12" \
-  -password "pass:$2"
+  -password "pass:$KEYPASS"
 
 sudo keytool -importkeystore \
   -srckeystore "/tmp/jiiify_cert_and_key.p12" \
   -srcstoretype "pkcs12" \
-  -srcstorepass "$2" \
+  -srcstorepass "$KEYPASS" \
   -destkeystore "le_jiiify.jks" \
-  -destkeypass "$2" \
-  -deststorepass "$2" \
+  -destkeypass "$KEYPASS" \
+  -deststorepass "$KEYPASS" \
   -trustcacerts
