@@ -8,10 +8,10 @@
 #  no_log: True
 
 - name: Download Jiiify
-  shell: wget https://s3-us-west-2.amazonaws.com/build-artifacts.library.ucla.edu/jiiify/{{ secret_files[jiiify_env]['github_branch']/jiiify-0.0.2-SNAPSHOT.jar -O /opt/jiiify/{{ secret_files[jiiify_env]['jiiify_vers'] }}
+  shell: wget https://s3-us-west-2.amazonaws.com/build-artifacts.library.ucla.edu/jiiify/{{ secret_files[jiiify_env]['github_branch'] }}/{{ secret_files[jiiify_env]['jiiify_vers'] }} -O /opt/jiiify/{{ secret_files[jiiify_env]['jiiify_vers'] }}
 
 - name: Set file attributes for Jar file
-  file: path=/opt/jiiify/jiiify-{{ jiiify_version }}.jar owner=jiiify mode=0600 state=file
+  file: path=/opt/jiiify/{{ secret_files[jiiify_env]['jiiify_vers'] }} owner=jiiify mode=0600 state=file
 
 # Using unzip instead of unarchive because we're only unzippping one particular file
 #- name: Unpack Jiiify supervisord.conf file
